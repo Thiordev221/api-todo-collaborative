@@ -48,6 +48,7 @@ public class Tache {
     public void onPersist(){
         if (termine == null) termine = false;
         echeance = LocalDateTime.now();
+        termine = false;
     }
     
 }

@@ -1,15 +1,10 @@
 package sn.thiordev221.app.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
@@ -44,7 +39,7 @@ import lombok.NoArgsConstructor;
         @UniqueConstraint(columnNames = "email")
     }
 )
-public class Utilisateur implements UserDetails{
+public class Utilisateur{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -53,7 +48,7 @@ public class Utilisateur implements UserDetails{
     private String email;
 
     @Column(nullable=false)
-    private String motDePasse;
+    private String password;
 
     @Column(nullable=false)
     private String pseudo;
@@ -67,39 +62,40 @@ public class Utilisateur implements UserDetails{
     private Set<Role> roles;
 
     @Column(nullable=false)
-    private boolean atif;
+    private boolean actif;
 
-    @OneToMany(mappedBy="utilisateur", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+    @OneToMany(mappedBy="proprietaire", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
     @Builder.Default
     private List<TodoList> todoLists = new ArrayList<>();
 
-    @OneToMany(mappedBy="utilisateur", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+    @OneToMany(mappedBy="invite", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
     @Builder.Default
     private List<Partage> partages = new ArrayList<>();
 
-    public Utilisateur(String email, String motDePasse){
+    public Utilisateur(String email, String password){
         this.email = email;
-        this.motDePasse = motDePasse;
+        this.password = password;
         this.roles = new HashSet<>(Collections.singletonList(Role.ROLE_USER));
+        this.actif = true;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(roles == null || roles.isEmpty()) return Collections.emptyList();
-        return this.roles.stream()
-                        .map(role -> new SimpleGrantedAuthority(role.name()))
-                        .toList();
-    }
+    // @Override
+    // public Collection<? extends GrantedAuthority> getAuthorities() {
+    //     if(roles == null || roles.isEmpty()) return Collections.emptyList();
+    //     return this.roles.stream()
+    //                     .map(role -> new SimpleGrantedAuthority(role.name()))
+    //                     .toList();
+    // }
 
-    @Override
-    public String getPassword() {
-        return this.motDePasse;
-    }
+    // @Override
+    // public String getPassword() {
+    //     return this.password;
+    // }
 
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
+    // @Override
+    // public String getUsername() {
+    //     return this.email;
+    // }
 
 
     @PrePersist
@@ -108,6 +104,7 @@ public class Utilisateur implements UserDetails{
             roles = new HashSet<>();
             roles.add(Role.ROLE_USER);
         }
+        this.actif = true;
     }
 
 }

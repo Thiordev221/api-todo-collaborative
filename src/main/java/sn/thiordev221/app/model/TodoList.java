@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,8 +43,8 @@ public class TodoList {
     private LocalDateTime dateCreation;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="user_id", nullable=false)
-    private Utilisateur utilisateur;
+    @JoinColumn(name="proprietaire_id", nullable=false)
+    private Utilisateur proprietaire;
 
     @OneToMany(mappedBy="todoList", cascade=CascadeType.ALL, orphanRemoval=true)
     @Builder.Default
@@ -52,5 +53,10 @@ public class TodoList {
     @OneToMany(mappedBy="todoList", cascade=CascadeType.ALL, orphanRemoval=true)
     @Builder.Default
     private List<Partage> partages = new ArrayList<>();
+
+    @PrePersist
+    public void prePersist() {
+        this.dateCreation = LocalDateTime.now();
+    }
     
 }

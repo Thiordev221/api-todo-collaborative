@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Table(
     name="partages",
     uniqueConstraints={
-        @UniqueConstraint(columnNames = {"utilisateur_id", "todo_list_id"})
+        @UniqueConstraint(columnNames = {"invite_id", "todo_list_id"})
     }
 )
 public class Partage {
@@ -37,8 +37,8 @@ public class Partage {
     private Long id;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="utilisateur_id", nullable=false)
-    private Utilisateur utilisateur;
+    @JoinColumn(name="invite_id", nullable=false)
+    private Utilisateur invite;
     
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="todo_list_id", nullable=false)
