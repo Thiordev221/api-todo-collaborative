@@ -11,6 +11,4 @@ public class TestController {
     public String getMethodName() {
         return "hello world !";
     }
-    
-    
 }
