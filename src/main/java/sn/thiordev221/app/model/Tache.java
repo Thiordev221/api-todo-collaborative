@@ -37,8 +37,11 @@ public class Tache {
     @Column(nullable=false)
     private Boolean termine;
 
-    @Column
+    @Column(insertable=false)
     private LocalDateTime echeance;
+
+    @Column(nullable=false, updatable=false)
+    private LocalDateTime dateCreation;
 
     @ManyToOne
     @JoinColumn(name="todo_list_id", nullable=false)
@@ -47,7 +50,7 @@ public class Tache {
     @PrePersist
     public void onPersist(){
         if (termine == null) termine = false;
-        echeance = LocalDateTime.now();
+        dateCreation = LocalDateTime.now();
         termine = false;
     }
     

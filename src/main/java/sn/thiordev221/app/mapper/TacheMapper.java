@@ -16,10 +16,12 @@ public interface TacheMapper {
     @Mapping(target = "id", ignore=true)
     @Mapping(target = "todoList", ignore=true)
     @Mapping(target = "termine", ignore=true)
+    @Mapping(target = "dateCreation", ignore=true)
     Tache toTache(TacheCreateRequest request);
 
     @Mapping(target = "id", ignore=true)
     @Mapping(target = "todoList", ignore=true)
+    @Mapping(target = "dateCreation", ignore=true)
     @BeanMapping(nullValuePropertyMappingStrategy = org.mapstruct.NullValuePropertyMappingStrategy.IGNORE)
     void updateTacheFromRequest(TacheUpdateRequest request, @MappingTarget Tache tache);
 

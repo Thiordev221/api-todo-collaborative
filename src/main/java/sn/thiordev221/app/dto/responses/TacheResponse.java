@@ -7,6 +7,7 @@ public record TacheResponse(
     String titre,
     String description,
     boolean termine,
+    LocalDateTime dateCreation,
     LocalDateTime echeance,
     Long todoListId
 ){}
