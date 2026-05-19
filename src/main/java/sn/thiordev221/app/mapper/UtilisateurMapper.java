@@ -8,7 +8,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import sn.thiordev221.app.dto.requests.RegisterRequest;
 import sn.thiordev221.app.dto.requests.UtilisateurUpdateRequest;
-import sn.thiordev221.app.dto.responses.AuthResponse;
+import sn.thiordev221.app.dto.responses.UtilisateurResponse;
 import sn.thiordev221.app.model.Utilisateur;
 
 @Mapper(componentModel="spring")
@@ -31,10 +31,7 @@ public interface UtilisateurMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUtilisateurFromRequest(UtilisateurUpdateRequest update, @MappingTarget Utilisateur utilisateur);
 
-    @Mapping(target = "userId", source="id")
-    @Mapping(target = "token", ignore=true)
-    @Mapping(target = "type", ignore=true)
-    AuthResponse toAuthResponse(Utilisateur utilisateur);
-
+    @Mapping(target = "dateCreation", ignore=true)
+    UtilisateurResponse toResponse(Utilisateur utilisateur);
 
 }

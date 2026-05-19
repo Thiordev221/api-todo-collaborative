@@ -27,6 +27,16 @@ public interface TodoListRepository extends JpaRepository<TodoList, Long> {
     @Query("SELECT t FROM TodoList t JOIN t.partages p WHERE t.id = :id AND p.invite.id = :inviteId")
     Optional<TodoList> findByIdAndInviteId(@Param("id") Long id, @Param("inviteId") Long inviteId);
 
+    // Récupérer toutes les listes de tâches partagées avec un utilisateur donné
+    @Query("SELECT t FROM TodoList t JOIN t.partages p WHERE p.invite.id = :inviteId")
+    Page<TodoList> findAllSharedToCurrentUser(@Param("inviteId") Long inviteId, Pageable pageable);
+
+    // Récupérer toutes les listes de tâches partagées par un utilisateur donné
+    @Query("SELECT t FROM TodoList t JOIN t.partages p WHERE t.proprietaire.id = :proprietaireId")
+    Page<TodoList> findAllSharedByCurrentUser(@Param("proprietaireId") Long proprietaireId, Pageable pageable);
+
     // Compter le nombre de listes de tâches appartenant à un utilisateur
     long countByProprietaireId(Long proprietaireId);
+
+
 }
