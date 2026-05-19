@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import sn.thiordev221.app.model.Permission;
 
 public record PartageResponse(
+    Long id,
     Long todoListId,
     String todoListTitre,
     String inviteEmail,

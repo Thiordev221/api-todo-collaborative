@@ -16,8 +16,10 @@ public interface TodoListRepository extends JpaRepository<TodoList, Long> {
     // Récupérer une liste de tâches par son ID et l'ID de son propriétaire
     Optional<TodoList> findByIdAndProprietaireId(Long id, Long proprietaireId);
 
+    //Récupérer toutes les listes d'un propriétaire par son id
     Page<TodoList> findAllByProprietaireId(Long proprietaireId, Pageable pageable);
 
+    // Récupérer toutes les listes de tâches d'un propriétaire avec leurs tâches associées
     @Query("SELECT t FROM TodoList t JOIN t.taches WHERE t.proprietaire.id = :proprietaireId")
     Page<TodoList> findAllWithTachesByProprietaireId(@Param("proprietaireId") Long proprietaireId, Pageable pageable);
 
