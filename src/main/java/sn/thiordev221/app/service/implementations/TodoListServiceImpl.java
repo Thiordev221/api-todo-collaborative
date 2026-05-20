@@ -15,7 +15,6 @@ import sn.thiordev221.app.dto.responses.TodoListResponse;
 import sn.thiordev221.app.mapper.TodoListMapper;
 import sn.thiordev221.app.model.TodoList;
 import sn.thiordev221.app.model.Utilisateur;
-import sn.thiordev221.app.repository.PartageRepository;
 import sn.thiordev221.app.repository.TodoListRepository;
 import sn.thiordev221.app.repository.UtilisateurRepository;
 import sn.thiordev221.app.service.contrats.TodoListService;
@@ -29,7 +28,7 @@ public class TodoListServiceImpl implements TodoListService{
     private final TodoListRepository todoListRepository;
     private final TodoListMapper todoListMapper;
     private final UtilisateurRepository utilisateurRepository;
-    private final PartageRepository partageRepository;
+    private final PermissionHelper helper;
 
      /**
      * Calcule les permissions de l'utilisateur actuel sur une liste donnée.
@@ -57,7 +56,7 @@ public class TodoListServiceImpl implements TodoListService{
         TodoList list = todoListRepository.findById(listId)
             .orElseThrow(() -> new TodoListNotFoundException("TodoList", "id", listId));
 
-        String permission = calculatePermissions(list, currentUserId);
+        String permission = helper.calculatePermissions(list, currentUserId);
         if ("NONE".equals(permission)) {
             throw new AccessDeniedException("Utilisateur", "id", currentUserId);
         }
@@ -105,7 +104,7 @@ public class TodoListServiceImpl implements TodoListService{
         log.info("Récupération des listes de tâches partagées avec l'utilisateur avec l'id : {} avec pagination : page {}, size {}", currentUserId, pageable.getPageNumber(), pageable.getPageSize());
         Page<TodoList> sharedListsPage = todoListRepository.findAllSharedToCurrentUser(currentUserId, pageable);
         return sharedListsPage.map(list -> {
-            String permission = calculatePermissions(list, currentUserId);
+            String permission = helper.calculatePermissions(list, currentUserId);
             return mapToResponse(list, permission);
         });
     }
@@ -119,16 +118,6 @@ public class TodoListServiceImpl implements TodoListService{
     }
 
 
-    // --- Méthodes privées utilitaires ---
-
-    private String calculatePermissions(TodoList list, Long userId) {
-        if (list.getProprietaire().getId().equals(userId)) {
-            return "OWNER";
-        }
-        return partageRepository.findByTodoListIdAndInviteId(list.getId(), userId)
-            .map(p -> p.getPermission().name())
-            .orElse("NONE");
-    }
 
     private TodoListResponse mapToResponse(TodoList list, String permission) {
         TodoListResponse response = todoListMapper.toTodoListResponse(list);

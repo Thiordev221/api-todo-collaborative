@@ -12,8 +12,6 @@ public record TacheUpdateRequest(
 
     @Size(max = 1000)
     String description,
-
-    boolean termine,
     
     LocalDateTime echeance
 ) {

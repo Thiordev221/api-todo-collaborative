@@ -35,9 +35,10 @@ public class Tache {
     private String description;
 
     @Column(nullable=false)
-    private Boolean termine;
+    @Builder.Default
+    private boolean termine = false;
 
-    @Column(insertable=false)
+    @Column
     private LocalDateTime echeance;
 
     @Column(nullable=false, updatable=false)
@@ -49,9 +50,7 @@ public class Tache {
 
     @PrePersist
     public void onPersist(){
-        if (termine == null) termine = false;
         dateCreation = LocalDateTime.now();
-        termine = false;
     }
     
 }

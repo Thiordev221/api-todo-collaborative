@@ -45,7 +45,8 @@ public class Partage {
     private TodoList todoList;
 
     @Enumerated(EnumType.STRING)
-    private Permission permission;
+    @Builder.Default
+    private Permission permission = Permission.ONLY_READ;
 
     private LocalDateTime datePartage;
 
@@ -53,7 +54,6 @@ public class Partage {
     @PrePersist
     public void onPersist(){
         datePartage = LocalDateTime.now();
-        if(permission == null) permission = Permission.ONLY_READ;
     }
     
 }

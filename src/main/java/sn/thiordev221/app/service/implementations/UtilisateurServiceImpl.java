@@ -24,6 +24,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
     private final UtilisateurRepository utilisateurRepository;
     private final UtilisateurMapper utilisateurMapper;
     
+    
     @Override
     @Transactional(readOnly = true)
     public UtilisateurResponse getUtilisateurById(Long id) {
