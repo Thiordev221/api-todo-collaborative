@@ -1,5 +1,6 @@
 package sn.thiordev221.app.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -63,6 +64,10 @@ public class Utilisateur{
 
     @Column(nullable=false)
     private boolean actif;
+
+    @Column(updatable=false)
+    @Builder.Default
+    private LocalDateTime dateCreation = LocalDateTime.now();
 
     @OneToMany(mappedBy="proprietaire", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
     @Builder.Default

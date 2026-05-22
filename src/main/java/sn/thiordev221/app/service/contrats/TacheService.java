@@ -15,7 +15,16 @@ public interface TacheService {
      * @param currentUserId L'identifiant de l'utilisateur qui fait la demande.
      * @return TacheResponse La tâche créée.
      */
-    TacheResponse ajouterTache(Long listId, TacheCreateRequest request, Long currentUserId);
+    TacheResponse createTache(Long listId, TacheCreateRequest request, Long currentUserId);
+
+    /**
+     * 
+     * @param tacheId L'identifiant de la tache 
+     * @param listId L'identifiant de la liste pour laquelle on veut la tache
+     * @param currentUserId L'identifiant de l'utilisateur qui fait la demande.
+     * @return la tache à retouner
+     */
+    TacheResponse getTacheById(Long tacheId,Long listId, Long currentUserId);
 
     /**
      * Modifie une tâche existante, en vérifiant que l'utilisateur a le droit de modifier cette tâche.
@@ -24,14 +33,14 @@ public interface TacheService {
      * @param currentUserId L'identifiant de l'utilisateur qui fait la demande.
      * @return TacheResponse La tâche mise à jour.
      */
-    TacheResponse modifierTache(Long tacheId, TacheUpdateRequest request, Long currentUserId);
+    TacheResponse updateTache(Long  listId, Long tacheId, TacheUpdateRequest request, Long currentUserId);
 
     /**
      * Supprime une tâche, en vérifiant que l'utilisateur a le droit de supprimer cette tâche.
      * @param tacheId L'identifiant de la tâche à supprimer.
      * @param currentUserId L'identifiant de l'utilisateur qui fait la demande.
      */
-    void supprimerTache(Long tacheId, Long currentUserId);
+    void deleteTache(Long listId, Long tacheId, Long currentUserId);
 
     /**
      * Récupère toutes les tâches d'une liste de tâches, en vérifiant que l'utilisateur a le droit d'accéder à cette liste.
@@ -48,5 +57,5 @@ public interface TacheService {
      * @param currentUserId L'identifiant de l'utilisateur qui fait la demande.
      * @return TacheResponse La tâche dont le statut a été changé.
      */
-    TacheResponse toggleStatus(Long tacheId, Long currentUserId);
+    TacheResponse toggleStatus(Long listId, Long tacheId, Long currentUserId);
 }

@@ -41,7 +41,7 @@ public class TacheServiceImpl implements TacheService{
     
     @Override
     @Transactional
-    public TacheResponse ajouterTache(Long listId, TacheCreateRequest request, Long currentUserId) {
+    public TacheResponse createTache(Long listId, TacheCreateRequest request, Long currentUserId) {
         log.info("Ajout d'une tâche dans la liste {}", listId);
         TodoList list = todoListRepository.findById(listId)
             .orElseThrow(() -> new TodoListNotFoundException("TodoList", "id", listId));
@@ -61,10 +61,10 @@ public class TacheServiceImpl implements TacheService{
 
     @Override
     @Transactional
-    public TacheResponse modifierTache(Long tacheId, TacheUpdateRequest request, Long currentUserId) {
+    public TacheResponse updateTache(Long listId, Long tacheId, TacheUpdateRequest request, Long currentUserId) {
         log.info("Modification d'une tâche dans la liste {}", tacheId);
         log.info("Vérification des permissions de l'utilisateur {} pour la tâche {}", currentUserId, tacheId);
-        Tache tache = tacheRepository.findById(tacheId)
+        Tache tache = tacheRepository.findByIdAndTodoListId(tacheId, listId)
             .orElseThrow(() -> new TacheNotFoundException("tache", "id", tacheId));
 
         log.info("Vérification des droits de l'utilisateur avec id : {} ", currentUserId);
@@ -84,10 +84,10 @@ public class TacheServiceImpl implements TacheService{
 
     @Override
     @Transactional
-    public void supprimerTache(Long tacheId, Long currentUserId) {
+    public void deleteTache(Long listId, Long tacheId, Long currentUserId) {
         log.info("Suppression d'une tâche dans la liste {}", tacheId);
         log.info("Vérification des permissions de l'utilisateur {} pour la tâche {}", currentUserId, tacheId);
-        Tache tache = tacheRepository.findById(tacheId)
+        Tache tache = tacheRepository.findByIdAndTodoListId(tacheId, listId)
             .orElseThrow(() -> new TacheNotFoundException("tache", "id", tacheId));
 
         log.info("Vérification des droits de l'utilisateur avec id : {} ", currentUserId);
@@ -118,10 +118,10 @@ public class TacheServiceImpl implements TacheService{
 
     @Override
     @Transactional
-    public TacheResponse toggleStatus(Long tacheId, Long currentUserId) {
+    public TacheResponse toggleStatus(Long listId, Long tacheId, Long currentUserId) {
         log.info("Changement de statut d'une tâche dans la liste {}", tacheId);
         log.info("Vérification des permissions de l'utilisateur {} pour la tâche {}", currentUserId, tacheId);
-        Tache tache = tacheRepository.findById(tacheId)
+        Tache tache = tacheRepository.findByIdAndTodoListId(tacheId, listId)
             .orElseThrow(() -> new TacheNotFoundException("tache", "id", tacheId));
 
         log.info("Vérification des droits de l'utilisateur avec id : {} ", currentUserId);
@@ -138,5 +138,14 @@ public class TacheServiceImpl implements TacheService{
         return tacheMapper.toTacheResponse(updated);
     }
 
+    @Override
+    @Transactional(readOnly=true)
+    public TacheResponse getTacheById(Long tacheId, Long listId, Long currentUserId) {
+        log.info("Récupération des tâches de la liste {} pour l'utilisateur {} avec pagination : page {}, size {}", listId, currentUserId);
+        Tache tache = tacheRepository.findByIdAndTodoListId(tacheId, listId)
+            .orElseThrow(() -> new TacheNotFoundException("TodoList", "id", listId));
+
+        return tacheMapper.toTacheResponse(tache);
+    }
 
 }

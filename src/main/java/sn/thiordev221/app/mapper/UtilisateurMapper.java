@@ -19,6 +19,7 @@ public interface UtilisateurMapper {
     @Mapping(target = "todoLists", ignore=true)
     @Mapping(target = "partages", ignore=true)
     @Mapping(target = "roles", ignore=true)
+    @Mapping(target = "dateCreation", ignore=true)
     Utilisateur toUtilisateur(RegisterRequest registerRequest);
 
 
@@ -28,10 +29,10 @@ public interface UtilisateurMapper {
     @Mapping(target = "roles", ignore=true)
     @Mapping(target = "todoLists", ignore=true)
     @Mapping(target = "email", ignore=true)
+    @Mapping(target = "dateCreation", ignore=true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUtilisateurFromRequest(UtilisateurUpdateRequest update, @MappingTarget Utilisateur utilisateur);
 
-    @Mapping(target = "dateCreation", ignore=true)
     UtilisateurResponse toResponse(Utilisateur utilisateur);
 
 }
