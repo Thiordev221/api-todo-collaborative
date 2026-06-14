@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import sn.thiordev221.app.model.Role;
 import sn.thiordev221.app.model.Utilisateur;
@@ -20,14 +21,14 @@ public class ApiTodoCollaborativeApplication {
 	}
 
 	@Bean
-public CommandLineRunner commandLineRunner(UtilisateurRepository utilisateurRepository) {
+public CommandLineRunner commandLineRunner(UtilisateurRepository utilisateurRepository, PasswordEncoder encoder) {
     return args -> {
 
         if (utilisateurRepository.count() > 0) return; // évite les doublons au redémarrage
 
         Utilisateur admin = Utilisateur.builder()
             .email("admin@todo.sn")
-            .password("admin123")
+            .password(encoder.encode("admin123"))
             .pseudo("Admin")
             .roles(Set.of(Role.ROLE_ADMIN, Role.ROLE_USER))
             .actif(true)

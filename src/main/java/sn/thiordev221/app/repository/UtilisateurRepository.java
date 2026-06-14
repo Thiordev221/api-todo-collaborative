@@ -13,6 +13,8 @@ import sn.thiordev221.app.model.Utilisateur;
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long>{
     boolean existsByEmail(String email);
 
+    boolean existsByPseudo(String pseudo);
+
     Optional<Utilisateur> findByEmail(String email);
 
     Page<Utilisateur> findAllByActifTrue(Pageable pageable);

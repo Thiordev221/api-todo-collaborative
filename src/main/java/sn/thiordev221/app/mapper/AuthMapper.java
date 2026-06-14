@@ -16,6 +16,7 @@ public interface AuthMapper {
     @Mapping(target = "roles", ignore=true)
     @Mapping(target = "todoLists", ignore=true)
     @Mapping(target = "pseudo", ignore=true)
+    @Mapping(target = "dateCreation", ignore=true)
     Utilisateur toUtilisateur(LoginRequest loginRequest);
 
     @Mapping(target = "id", ignore=true)
@@ -23,11 +24,13 @@ public interface AuthMapper {
     @Mapping(target = "actif", ignore=true)
     @Mapping(target = "roles", ignore=true)
     @Mapping(target = "todoLists", ignore=true)
+    @Mapping(target = "dateCreation", ignore=true)
     Utilisateur toUtilisateurFromRegisterRequest(RegisterRequest registerRequest);
 
     @Mapping(target = "userId", source="id")
-    @Mapping(target = "token", ignore=true)
-    @Mapping(target = "type", ignore=true)
+    @Mapping(target = "accessToken", ignore=true)
+    @Mapping(target = "refreshToken", ignore=true)
+    @Mapping(target = "tokenType", ignore=true)
     AuthResponse toAuthResponse(Utilisateur utilisateur);
 
 }

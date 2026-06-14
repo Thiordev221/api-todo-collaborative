@@ -30,6 +30,7 @@ public interface UtilisateurMapper {
     @Mapping(target = "todoLists", ignore=true)
     @Mapping(target = "email", ignore=true)
     @Mapping(target = "dateCreation", ignore=true)
+    @Mapping(target = "authorities", ignore=true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUtilisateurFromRequest(UtilisateurUpdateRequest update, @MappingTarget Utilisateur utilisateur);
 

@@ -14,10 +14,12 @@ import org.springframework.web.context.request.WebRequest;
 import sn.thiordev221.app.custom_exceptons.AccessDeniedException;
 import sn.thiordev221.app.custom_exceptons.AlreadySharedException;
 import sn.thiordev221.app.custom_exceptons.InvalidPermissionException;
+import sn.thiordev221.app.custom_exceptons.InvalidTokenException;
 import sn.thiordev221.app.custom_exceptons.PartageNotFoundException;
 import sn.thiordev221.app.custom_exceptons.SelfSharingException;
 import sn.thiordev221.app.custom_exceptons.TacheNotFoundException;
 import sn.thiordev221.app.custom_exceptons.TodoListNotFoundException;
+import sn.thiordev221.app.custom_exceptons.TokenReplayException;
 import sn.thiordev221.app.custom_exceptons.UtilisateurConflictException;
 import sn.thiordev221.app.custom_exceptons.UtilisateurNotFoundException;
 import sn.thiordev221.app.dto.responses.ErrorResponse;
@@ -30,7 +32,8 @@ public class GlobalExceptionHandler {
         UtilisateurNotFoundException.class,
         TodoListNotFoundException.class,
         TacheNotFoundException.class,
-        PartageNotFoundException.class
+        PartageNotFoundException.class,
+        InvalidTokenException.class
     })
     public ResponseEntity<ErrorResponse> handleNottFOundException(RuntimeException ex, WebRequest  request) {
         return buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
@@ -49,7 +52,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
         UtilisateurConflictException.class,
         AlreadySharedException.class,
-        SelfSharingException.class
+        SelfSharingException.class,
+        TokenReplayException.class
     })
     public ResponseEntity<ErrorResponse> handleConflict(RuntimeException ex, WebRequest request) {
         return buildErrorResponse(ex, HttpStatus.CONFLICT, request);

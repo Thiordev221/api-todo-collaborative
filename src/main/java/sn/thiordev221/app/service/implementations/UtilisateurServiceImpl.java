@@ -2,6 +2,9 @@ package sn.thiordev221.app.service.implementations;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +22,7 @@ import sn.thiordev221.app.service.contrats.UtilisateurService;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class UtilisateurServiceImpl implements UtilisateurService{
+public class UtilisateurServiceImpl implements UtilisateurService, UserDetailsService{
 
     private final UtilisateurRepository utilisateurRepository;
     private final UtilisateurMapper utilisateurMapper;
@@ -81,6 +84,12 @@ public class UtilisateurServiceImpl implements UtilisateurService{
                 .orElseThrow(()->new UtilisateurNotFoundException("Utilisateur", "id", id));
         utilisateurRepository.delete(found);
         log.info("Utilisateur avec l'id {} supprimé avec succès", id);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return utilisateurRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé avec l'email : " + username));
     }
     
 }

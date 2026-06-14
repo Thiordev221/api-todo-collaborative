@@ -2,10 +2,15 @@ package sn.thiordev221.app.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
@@ -40,7 +45,7 @@ import lombok.NoArgsConstructor;
         @UniqueConstraint(columnNames = "email")
     }
 )
-public class Utilisateur{
+public class Utilisateur implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -84,23 +89,23 @@ public class Utilisateur{
         this.actif = true;
     }
 
-    // @Override
-    // public Collection<? extends GrantedAuthority> getAuthorities() {
-    //     if(roles == null || roles.isEmpty()) return Collections.emptyList();
-    //     return this.roles.stream()
-    //                     .map(role -> new SimpleGrantedAuthority(role.name()))
-    //                     .toList();
-    // }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(roles == null || roles.isEmpty()) return Collections.emptyList();
+        return this.roles.stream()
+                        .map(role -> new SimpleGrantedAuthority(role.name()))
+                        .toList();
+    }
 
-    // @Override
-    // public String getPassword() {
-    //     return this.password;
-    // }
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
 
-    // @Override
-    // public String getUsername() {
-    //     return this.email;
-    // }
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
 
 
     @PrePersist

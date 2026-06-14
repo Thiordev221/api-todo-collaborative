@@ -2,19 +2,22 @@ package sn.thiordev221.app.dto.responses;
 
 import java.util.List;
 
-import sn.thiordev221.app.model.Role;
-
 public record AuthResponse(
-    String token,
-    String type, // "Bearer"
+    String accessToken,
+    String refreshToken,
+    String tokenType,
     Long userId,
     String email,
     String pseudo,
-    List<Role> roles
+    List<String> roles    // String plutôt que Role — le frontend n'a pas ton enum
 ) {
-    // Petit constructeur pratique pour fixer le type par défaut
-    public AuthResponse(String token, Long userId, String email, String pseudo, List<Role> roles) {
-        this(token, "Bearer", userId, email, pseudo, roles);
-  } 
-    
+    // Constructeur pratique — tokenType toujours "Bearer"
+    public AuthResponse(String accessToken,
+                        String refreshToken,
+                        Long userId,
+                        String email,
+                        String pseudo,
+                        List<String> roles) {
+        this(accessToken, refreshToken, "Bearer", userId, email, pseudo, roles);
+    }
 }

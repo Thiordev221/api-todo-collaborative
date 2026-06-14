@@ -17,6 +17,15 @@ spring:
             hibernate:
                 format_sql: true
                 dialect: org.hibernate.dialect.PostgreSQLDialect
+
+app:
+  jwt:
+    keystore-path: classpath:keystore.p12
+    keystore-password: ${JWT_KEYSTORE_PASSWORD:Thior552005}   # variable d'env
+    key-alias: jwt-key
+    key-password: ${JWT_KEY_PASSWORD:Thior552005}             # variable d'env
+    access-token-expiration: 900000       # 15 minutes en ms
+    refresh-token-expiration: 604800000   # 7 jours en ms
         
 
 logging:
