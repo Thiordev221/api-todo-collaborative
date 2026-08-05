@@ -30,12 +30,6 @@ public class TodoListServiceImpl implements TodoListService{
     private final UtilisateurRepository utilisateurRepository;
     private final PermissionHelper helper;
 
-     /**
-     * Calcule les permissions de l'utilisateur actuel sur une liste donnée.
-     * @param list La liste de tâches.
-     * @param currentUserId L'identifiant de l'utilisateur actuel.
-     * @return String "OWNER", "EDITOR", "VIEWER" ou "NONE" selon les permissions de l'utilisateur.
-     */
     
     @Override
     public TodoListResponse createList(TodoListRequest request, Long currentUserId) {
