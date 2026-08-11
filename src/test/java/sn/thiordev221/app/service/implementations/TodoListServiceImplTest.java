@@ -114,6 +114,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 import sn.thiordev221.app.custom_exceptons.AccessDeniedException;
 import sn.thiordev221.app.custom_exceptons.TodoListNotFoundException;
 import sn.thiordev221.app.dto.requests.TodoListRequest;
@@ -125,6 +126,7 @@ import sn.thiordev221.app.model.Utilisateur;
 import sn.thiordev221.app.repository.TodoListRepository;
 import sn.thiordev221.app.repository.UtilisateurRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -346,4 +348,27 @@ class TodoListServiceImplTest {
         verify(todoListRepository, never()).delete(any(TodoList.class));
     }
 
+    @Test
+    void should_get_lists_for_a_user(){
+        Long userId = 1L;
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id"));
+
+        Utilisateur proprietaire = Utilisateur.builder().id(userId).pseudo("Abdoulaye").build();
+        TodoList todoListFound = TodoList.builder().id(1L).titre("todo 1").description("desc").proprietaire(proprietaire).build();
+
+        Page<TodoList> todoListPage = new PageImpl<>(List.of(todoListFound), pageable, 1);
+
+
+        TodoListResponse expected = new TodoListResponse(
+                todoListFound.getId(), todoListFound.getTitre(), todoListFound.getDescription(),
+                todoListFound.getDateCreation(), proprietaire.getId(), proprietaire.getPseudo(), 0, "OWNER");
+
+        when(todoListRepository.findAllByProprietaireId(userId, pageable)).thenReturn(todoListPage);
+        when(todoListMapper.toTodoListResponse(todoListFound)).thenReturn(expected);
+
+        Page<TodoListResponse> result = todoListService.getMyLists(userId, pageable);
+
+        assertEquals(1, result.getTotalElements());
+        assertEquals(expected, result.getContent().get(0));
+    }
 }
